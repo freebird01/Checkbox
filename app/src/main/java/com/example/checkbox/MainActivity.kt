@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.checkbox.ui.theme.CheckboxTheme
 
 class MainActivity : ComponentActivity() {
@@ -60,56 +62,73 @@ fun CheckboxExample(name: String, modifier: Modifier = Modifier) {
     val fixedText = remember {
         mutableStateOf("Select Your Gender")
     }
-    
+
+    val myColor =  0xFFF44336
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.LightGray),
+            .background(color = Color(0xFF027CCD)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
             text = fixedText.value,
             modifier = Modifier
-                .background(color = Color.Red, shape = RoundedCornerShape(10.dp))
-                .padding(start = 20.dp, end = 20.dp, top = 10.dp, bottom = 10.dp),
+                .width(300.dp)
+                .background(color = Color(myColor), shape = RoundedCornerShape(10.dp))
+                .padding(top = 15.dp, bottom = 15.dp),
             color = Color.White,
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center
         )
 
-        Spacer(Modifier.size(20.dp))
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = maleCheckboxValue.value,
+                    onCheckedChange = {
+                        maleCheckboxValue.value = it
+                        if (it) {
+                            femaleCheckboxValue.value = false
+                            fixedText.value = "Your gender is male"
+                        } else {
+                            fixedText.value = "Select Your Gender"
+                        }
+                    },
+                    colors = CheckboxDefaults.colors(Color(myColor))
+                )
 
-        Row(modifier = Modifier.width(150.dp)) {
-            Checkbox(
-                checked = maleCheckboxValue.value,
-                onCheckedChange = {
-                    maleCheckboxValue.value = true
-                    femaleCheckboxValue.value = false
-                    fixedText.value = "Your gender is male"
-                },
-            )
+                Text(
+                    text = "Male",
+                    color = Color.White
+                )
+            }
 
-            Text(
-                text = "Male",
-                modifier = Modifier.padding(top = 10.dp),
-                color = Color.White
-            )
-        }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = femaleCheckboxValue.value,
+                    onCheckedChange = {
+                        femaleCheckboxValue.value = it
+                        if (it) {
+                            maleCheckboxValue.value = false
+                            fixedText.value = "Your gender is female"
+                        } else {
+                            fixedText.value = "Select Your Gender"
+                        }
+                    },
+                    colors = CheckboxDefaults.colors(Color(myColor))
+                )
 
-        Row(modifier = Modifier.width(150.dp)) {
-            Checkbox(
-                checked = femaleCheckboxValue.value,
-                onCheckedChange = {
-                    femaleCheckboxValue.value = true
-                    maleCheckboxValue.value = false
-                    fixedText.value = "Your gender is female"
-                }
-            )
-
-            Text(
-                text = "Female",
-                modifier = Modifier.padding(top = 10.dp),
-                color = Color.White
-            )
+                Text(
+                    text = "Female",
+                    color = Color.White
+                )
+            }
         }
     }
 
